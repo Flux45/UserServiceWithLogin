@@ -1,7 +1,7 @@
 package com.scaler.userservice.Repository;
 
 
-import com.scaler.userservice.models.Token;
+import com.scaler.userservice.models.token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,11 +10,11 @@ import java.util.Optional;
 
 
 @Repository
-public interface TokenRepository extends JpaRepository<Token,Long> {
+public interface TokenRepository extends JpaRepository<token,Long> {
 
-    Token save(Token token);
+    token save(token token);
 
-    Optional<Token> findByValueAndDeleted(String value,boolean isDeleted);
+    Optional<token> findByValueAndDeleted(String value, boolean isDeleted);
 
-    Optional<Token> findByValueAndDeletedAndExpiryAtGreaterThan(String value, boolean isDeleted, Date expiryGreaterThan);
+    Optional<token> findByValueAndDeletedAndExpiryAtGreaterThan(String value, boolean isDeleted, Date expiryGreaterThan);
 }

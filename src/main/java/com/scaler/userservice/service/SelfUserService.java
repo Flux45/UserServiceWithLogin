@@ -4,8 +4,8 @@ import com.scaler.userservice.Repository.RoleRepository;
 import com.scaler.userservice.Repository.TokenRepository;
 import com.scaler.userservice.Repository.UserRepository;
 import com.scaler.userservice.exception.UserNotFountException;
-import com.scaler.userservice.models.Token;
-import com.scaler.userservice.models.User;
+import com.scaler.userservice.models.token;
+import com.scaler.userservice.models.user;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 
 @Primary
@@ -35,20 +34,20 @@ public class SelfUserService implements UserService{
     }
 
     @Override
-    public Token login(String email, String password) throws UserNotFountException {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public token login(String email, String password) throws UserNotFountException {
+        Optional<user> userOptional = userRepository.findByEmail(email);
 
         if(userOptional.isEmpty()) {
             throw new UserNotFountException("User with email: " + email + " doesn't exists");
         }
 
-        User user = userOptional.get();
+        user user = userOptional.get();
 
         if(!bCryptPasswordEncoder.matches(password,user.getHashedPassword())) {
             throw new UserNotFountException("Password entered is incorrect");
         }
 
-        Token token = new Token();
+        token token = new token();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, 30);
         Date dateIn30Days = calendar.getTime();
@@ -58,19 +57,19 @@ public class SelfUserService implements UserService{
 
         token.setValue(RandomStringUtils.randomAlphanumeric(128));
 
-        Token savedToken = tokenRepository.save(token);
+        com.scaler.userservice.models.token savedToken = tokenRepository.save(token);
 
         return savedToken;
     }
 
     @Override
     public Void logout(String token) {
-        Optional<Token> token1 = tokenRepository.findByValueAndDeleted(token, false);
+        Optional<com.scaler.userservice.models.token> token1 = tokenRepository.findByValueAndDeleted(token, false);
         if (token1.isEmpty()) {
             // throw TokenNotExistsOrAlreadyExpiredException
         }
 
-        Token tkn = token1.get();
+        com.scaler.userservice.models.token tkn = token1.get();
         tkn.setDeleted(true);
         tokenRepository.save(tkn);
         return null;
@@ -78,19 +77,19 @@ public class SelfUserService implements UserService{
 
 
     @Override
-    public User signUp(String fullName, String email, String password) {
-        User u = new User();
+    public user signUp(String fullName, String email, String password) {
+        user u = new user();
         u.setEmail(email);
         u.setName(fullName);
         u.setHashedPassword(bCryptPasswordEncoder.encode(password));
 
-        User user = userRepository.save(u);
+        user user = userRepository.save(u);
         return user;
     }
 
     @Override
-    public User validateToken(String token) {
-        Optional<Token> tkn = tokenRepository.findByValueAndDeletedAndExpiryAtGreaterThan(token,false, new Date());
+    public user validateToken(String token) {
+        Optional<com.scaler.userservice.models.token> tkn = tokenRepository.findByValueAndDeletedAndExpiryAtGreaterThan(token,false, new Date());
 
         if (tkn.isEmpty()) {
             return null;

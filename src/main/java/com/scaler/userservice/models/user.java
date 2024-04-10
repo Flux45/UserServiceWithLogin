@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class User extends BaseModel {
+public class user extends baseModel {
     private String name;
     private String email;
     private String hashedPassword;
     @ManyToMany
-    private List<Role> roles;
+    private List<role> roles;
     private boolean isEmailVerified;
 
 }

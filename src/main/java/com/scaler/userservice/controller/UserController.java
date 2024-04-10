@@ -4,20 +4,18 @@ import com.scaler.userservice.Repository.TokenRepository;
 import com.scaler.userservice.dtos.LoginRequestDto;
 import com.scaler.userservice.dtos.LogoutRequestDto;
 import com.scaler.userservice.dtos.SignUpRequestDto;
+import com.scaler.userservice.dtos.UserDto;
 import com.scaler.userservice.exception.UserNotFountException;
-import com.scaler.userservice.models.Token;
-import com.scaler.userservice.models.User;
+import com.scaler.userservice.models.token;
+import com.scaler.userservice.models.user;
 import com.scaler.userservice.service.UserService;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -35,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Token login(@RequestBody LoginRequestDto loginRequestDto) throws UserNotFountException {
+    public token login(@RequestBody LoginRequestDto loginRequestDto) throws UserNotFountException {
         // check if email and password in db
         // if yes return user
         // else throw some error
@@ -43,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public User signUp(@RequestBody SignUpRequestDto requestDto) {
+    public user signUp(@RequestBody SignUpRequestDto requestDto) {
         // no need to hash password for now
         // just store user as is in the db
         // for now no need to have email verification either
@@ -63,7 +61,7 @@ public class UserController {
     }
 
     @PostMapping("/validate/{token}")
-    public User validateToken(@PathVariable("token") @NotNull String token) {
-        return userService.validateToken(token);
+    public UserDto validateToken(@PathVariable("token") @NotNull String token) {
+        return UserDto.from(userService.validateToken(token));
     }
 }

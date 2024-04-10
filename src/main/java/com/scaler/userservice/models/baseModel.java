@@ -10,7 +10,7 @@ import lombok.Setter;
 @MappedSuperclass
 @Getter
 @Setter
-public class BaseModel {
+public class baseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
